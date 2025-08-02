@@ -31,23 +31,9 @@ app.get("/api/health", (req, res) => {
 
 // MongoDB Connection
 mongoose
-  .connect(
-    process.env.MONGODB_URI || "mongodb://localhost:27017/mini-linkedin",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error("MongoDB connection error:", error);
-    process.exit(1);
-  });
+  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/mini-linkedin")
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
