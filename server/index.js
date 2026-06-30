@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const helmet = require("helmet");
+const helmet = require("helmet"); // XSS attacks prevent ,script injection prevent
 const morgan = require("morgan");
 require("dotenv").config();
 
@@ -29,11 +29,23 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "OK", message: "Mini LinkedIn API is running" });
 });
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/mini-linkedin")
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+// MongoDB Connection with better error handling
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/mini-linkedin"
+    );
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error("❌ MongoDB Connection Error:", error.message);
+    console.log(
+      "💡 Tip: Use MongoDB Atlas (cloud) or start local MongoDB service"
+    );
+    // Don't exit, let server run without database for now
+  }
+};
+
+connectDB();
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -42,3 +54,7 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

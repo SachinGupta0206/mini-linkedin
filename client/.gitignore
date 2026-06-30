@@ -1,0 +1,26 @@
+# Ignore all log files
+*.log
+
+# Ignore the build directory
+/build/
+
+# Ignore specific temporary files
+*.tmp
+temp_file.txt
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore Node.js module directory
+node_modules/
+
+# Don't ignore a specific log file
+!debug.log
+
+# Environment variables (keep .env private, but allow .env.example)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
